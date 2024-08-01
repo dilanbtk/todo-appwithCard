@@ -3,9 +3,8 @@ import { Calendar } from 'antd';
 import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import dayjs from 'dayjs';
-import isBetween from 'dayjs/plugin/isBetween'; // Import the isBetween plugin
-dayjs.extend(isBetween); // Extend dayjs with the isBetween plugin
-
+import isBetween from 'dayjs/plugin/isBetween';
+    dayjs.extend(isBetween);
 const CalendarPage = () => {
   const [todos, setTodos] = useState([]);
 
@@ -29,7 +28,7 @@ const CalendarPage = () => {
     };
 
     fetchTodos();
-  }, []);//Implement a function to get the color of the todo based on the difference between the start and end dates of the todo data  
+  }, []);
 
   const getTodoColor = (startDate, endDate) => {
     const colors = ['#983e3e', '#8bbd78', '#a7cfe5', '#b3bec3', '#f5e8a3', '#e9818d', '#a9c3cb', '#cd97e0'];
@@ -54,9 +53,9 @@ const CalendarPage = () => {
               padding: '8px',
               borderRadius: '8px',
               textAlign: 'center',
-              color: '#333', // Lighter black color for better readability
+              color: '#333', 
               fontSize: '14px',
-              fontWeight: 'bold', // Make the text bold
+              fontWeight: 'bold', 
               lineHeight: '1.5',
               overflow: 'hidden',
               height: '20px',

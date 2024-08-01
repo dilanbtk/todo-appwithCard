@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase'; // Adjust the path to your Firebase config file
+import { db } from '../firebase'; 
 
 const localizer = momentLocalizer(moment);
 

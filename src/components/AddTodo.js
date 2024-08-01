@@ -92,7 +92,7 @@ const AddTodo = () => {
 
   return (
     <>
-      <div className="fixed top-4 right-4 flex items-center space-x-2">
+      <div className=" absolute  top-4 right-4  flex items-center space-x-2">
         <Input
           type="text"
           placeholder="Search"
@@ -210,4 +210,3 @@ const AddTodo = () => {
 };
 
 export default AddTodo;
-

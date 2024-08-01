@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { db } from '../firebase';
-import { collection, query, where, onSnapshot, deleteDoc, doc, updateDoc } from 'firebase/firestore';
-import TodoCard from './TodoCard';
+import { useParams, useLocation } from 'react-router-dom';
+import { db } from '../firebase'; // Firebase veritabanı ayarlarını içeren dosya
+import { collection, query, where, onSnapshot, deleteDoc, doc, updateDoc } from 'firebase/firestore'; // Firestore'dan veri almak ve güncellemek için gerekli fonksiyonlar
+import TodoCard from './TodoCard'; // Todo kartını render etmek için bileşen
 
 const TodosByCategory = ({ searchTerm }) => {
   const { category } = useParams();
+  const location = useLocation();
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
@@ -23,8 +24,18 @@ const TodosByCategory = ({ searchTerm }) => {
     return () => unsubscribe();
   }, [category]);
 
-  const filteredTodos = todos.filter((todo) =>
-    todo.title.toLowerCase().includes(searchTerm.toLowerCase())
+  useEffect(() => {
+    if (location.hash) {
+      const todoId = location.hash.substring(1);
+      const todoElement = document.getElementById(todoId);
+      if (todoElement) {
+        todoElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [location.hash, todos]);
+
+  const filteredTodos = todos.filter(todo => 
+    (todo.title ? todo.title.toLowerCase() : '').includes(searchTerm.toLowerCase())
   );
 
   const handleDelete = async (id) => {
@@ -46,17 +57,15 @@ const TodosByCategory = ({ searchTerm }) => {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">{category}</h1>
-      <div className="flex flex-wrap justify-around"
-     style={{ fontFamily: 'Dancing Script, cursive' }} 
-      >
+      <div className="flex flex-wrap justify-around" style={{ fontFamily: 'Dancing Script, cursive' }}>
         {filteredTodos.map((todo) => (
-          <TodoCard
-            key={todo.id}
-            todo={todo}
-            onDelete={handleDelete}
-            onUpdate={handleUpdate}
-            
-          />
+          <div key={todo.id} id={todo.id}>
+            <TodoCard
+              todo={todo}
+              onDelete={handleDelete}
+              onUpdate={handleUpdate}
+            />
+          </div>
         ))}
       </div>
     </div>

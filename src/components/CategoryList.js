@@ -18,10 +18,11 @@ const CategoryList = () => {
         categorySet.add(doc.data().category);
       });
       setCategories([...categorySet]);
-    });
+    }); 
 
     return () => unsubscribe();
-  }, []);
+  }, []); // unsubscribe  to the todos collection and update the categories state with the unique categories from the todos collection  
+// subscribe  to the todos collection and update the categories state with the unique categories from the todos collection  
 
   const handleDelete = async (category) => {
     try {
@@ -34,13 +35,13 @@ const CategoryList = () => {
     } catch (error) {
       message.error('Failed to delete category');
     }
-  };
+  }; // end delete category function  
 
   const handleEdit = (category) => {
     setCurrentCategory(category);
     setNewCategoryName(category);
     setIsModalVisible(true);
-  };
+  }; // end handleEdit function 
 
   const handleOk = async () => {
     if (newCategoryName && newCategoryName !== currentCategory) {
@@ -58,7 +59,7 @@ const CategoryList = () => {
     } else {
       message.warning('No changes made');
     }
-  };
+  }; // end handleOk function for category update function  
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -75,7 +76,7 @@ const CategoryList = () => {
         />
       ))}
       <Modal
-        title="tegory"
+        title="Edit Category"
         open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}

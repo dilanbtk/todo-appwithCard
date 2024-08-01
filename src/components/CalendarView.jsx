@@ -9,25 +9,25 @@ import { db } from '../firebase'; // Adjust the path to your Firebase config fil
 const localizer = momentLocalizer(moment);
 
 const CalendarView = () => {
-  const [events, setEvents] = useState([]);// Initialize events state
+  const [events, setEvents] = useState([]);
 
-  useEffect(() => { // Fetch todos from Firestore
+  useEffect(() => { 
     const fetchTodos = async () => {
       const todosCollection = collection(db, 'todos');
       const todoSnapshot = await getDocs(todosCollection);
       const todos = todoSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
 
       const events = todos
-        .filter(todo => todo.startDate) // Filter out todos without a start date
+        .filter(todo => todo.startDate)
         .map(todo => ({
           title: todo.title,
           start: todo.startDate.toDate(),
-          end: todo.endDate ? todo.endDate.toDate() : todo.startDate.toDate(), // Use endDate if available
+          end: todo.endDate ? todo.endDate.toDate() : todo.startDate.toDate(), 
           allDay: true,
         }));
 
       setEvents(events);
-    };  // Call fetchTodos function when component mounts itself  
+    }; 
 
     fetchTodos();
   }, []);
