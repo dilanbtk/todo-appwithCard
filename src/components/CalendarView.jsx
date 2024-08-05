@@ -30,7 +30,7 @@ const CalendarView = () => {
     }; 
 
     fetchTodos();
-  }, []);
+  }, []); // Fetch todos data from Firestore and set the events state
 
   return (
     <div style={{ height: '80vh' }}>
@@ -39,7 +39,7 @@ const CalendarView = () => {
         events={events}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: '100%' }}
+        style={{ height: '100%'  }}
       />
     </div>  // Render the Calendar component with events data and localizer
   );

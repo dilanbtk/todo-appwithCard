@@ -13,34 +13,34 @@ const TodosByCategory = lazy(() => import('./components/TodosByCategory'));
 const CalendarPage = lazy(() => import('./components/CalendarPage'));
 
 const App = () => {
-  const [searchResults, setSearchResults] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);//  SearchResults bileşenindeki sonuçları saklamak için durum değişkeni
+  const [searchTerm, setSearchTerm] = useState(''); // Arama terimini saklamak için durum değişkeni
 
   useEffect(() => {
     if (searchTerm.trim() === '') {
       setSearchResults([]);
       return;
-    }
+    } //  searchTerm boşsa, sonuçları sıfırla ve fonksiyondan çık 
 
     const q = query(collection(db, 'todos'));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const allTodos = [];
       querySnapshot.forEach((doc) => {
         allTodos.push({ ...doc.data(), id: doc.id });
-      });
+      }); //  Tüm todo'ları al ve allTodos dizisine ekle
 
       const filteredResults = allTodos.filter(todo => 
         (todo.title ? todo.title.toLowerCase() : '').includes(searchTerm.toLowerCase())
       );
       setSearchResults(filteredResults);
-    });
+    }); //  Arama terimine göre filtrele ve sonuçları güncelle
 
     return () => unsubscribe();
   }, [searchTerm]);
 
   const handleSearch = (term) => {
     setSearchTerm(term);
-  };
+  }; //  Arama terimini güncellemek için bir fonksiyon
 
   return (
     <Router>
@@ -51,6 +51,7 @@ const App = () => {
             <div className="mb-4">
               <Suspense fallback={<LoadingSpinner />}>
                 <AddTodo />
+                
               </Suspense>
             </div>
             <div className="mb-4">

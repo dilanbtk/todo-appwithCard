@@ -4,9 +4,12 @@ import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
-    dayjs.extend(isBetween);
+
+dayjs.extend(isBetween);
+
 const CalendarPage = () => {
   const [todos, setTodos] = useState([]);
+  const [todoColors, setTodoColors] = useState({});
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -22,6 +25,14 @@ const CalendarPage = () => {
           };
         }).filter(todo => todo.startDate && todo.endDate);
         setTodos(todosData);
+
+        // Generate and assign pastel colors for each todo
+        const colors = {};
+        todosData.forEach(todo => {
+          colors[todo.id] = getPastelColor();
+        });
+        setTodoColors(colors);
+
       } catch (error) {
         console.error("Error fetching todos:", error);
       }
@@ -30,10 +41,10 @@ const CalendarPage = () => {
     fetchTodos();
   }, []);
 
-  const getTodoColor = (startDate, endDate) => {
-    const colors = ['#983e3e', '#8bbd78', '#a7cfe5', '#b3bec3', '#f5e8a3', '#e9818d', '#a9c3cb', '#cd97e0'];
-    const diffDays = endDate.diff(startDate, 'day');
-    return colors[diffDays % colors.length];
+  const getPastelColor = () => {
+    const hue = Math.floor(Math.random() * 360);
+    const pastel = `hsl(${hue}, 70%, 85%)`; // More pastel-like colors
+    return pastel;
   };
 
   const cellRender = (current) => {
@@ -47,22 +58,24 @@ const CalendarPage = () => {
     return (
       <div style={{ height: '100%' }}>
         <ul className="events" style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
-          {todosForDate.map((todo, index) => (
-            <li key={index} style={{
-              backgroundColor: getTodoColor(todo.startDate, todo.endDate),
+          {todosForDate.map((todo) => (
+            <li key={todo.id} style={{
+              backgroundColor: todo.completed ? '#f0f0f0' : todoColors[todo.id],
               padding: '8px',
               borderRadius: '8px',
               textAlign: 'center',
-              color: '#333', 
+              color: todo.completed ? '#b0b0b0' : '#333', // Light gray color for completed todos
               fontSize: '14px',
-              fontWeight: 'bold', 
+              fontWeight: 'bold',
               lineHeight: '1.5',
               overflow: 'hidden',
-              height: '20px',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              boxSizing: 'border-box'
+              boxSizing: 'border-box',
+              margin: '4px 0',
+              textDecoration: todo.completed ? 'line-through' : 'none',
+              textDecorationThickness: todo.completed ? '2px' : 'auto', // Thicker line-through
             }}>
               {todo.title}
             </li>
@@ -81,4 +94,3 @@ const CalendarPage = () => {
 };
 
 export default CalendarPage;
-

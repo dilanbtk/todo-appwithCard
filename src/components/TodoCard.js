@@ -101,14 +101,14 @@ const TodoCard = ({ todo, onDelete, onUpdate }) => {
         }}
           onClick={() => setPickerVisible(!pickerVisible)}
         >
-          {selectedEmoji || '+'}
+          {selectedEmoji || ' '}
         </div>
 
         <Meta
-          title={<span style={{ fontFamily: 'Dancing Script, cursive' }}>{newTitle}</span>}
-          description={<span style={{ fontFamily: 'Dancing Script, cursive' }}>{newDescription}</span>}
+          title={<span style={{ fontFamily: 'Dancing Script, cursive', textDecoration: completed ? 'line-through' : 'none' }}>{newTitle}</span>}
+          description={<span style={{ fontFamily: 'Dancing Script, cursive', textDecoration: completed ? 'line-through' : 'none' }}>{newDescription}</span>}
         />
-        <p className="mt-2 text-gray-500" style={{ fontFamily: 'Dancing Script, cursive' }}>
+        <p className="mt-2 text-gray-500" style={{ fontFamily: 'Dancing Script, cursive', textDecoration: completed ? 'line-through' : 'none' }}>
           {todo.category}
         </p>
         <Checkbox
@@ -119,10 +119,10 @@ const TodoCard = ({ todo, onDelete, onUpdate }) => {
           {completed ? 'Completed' : 'Not Completed'}
         </Checkbox>
         <div style={{ position: 'absolute', top: 8, right: 8, textAlign: 'right' }}>
-          <p style={{ marginBottom: 4, fontFamily: 'Dancing Script, cursive', color: '#333', fontSize: '0.875rem' }}>
+          <p style={{ marginBottom: 4, fontFamily: 'Dancing Script, cursive', color: '#333', fontSize: '0.875rem', textDecoration: completed ? 'line-through' : 'none' }}>
             Start: {startDate ? startDate.format('DD-MM-YYYY') : '...'}
           </p>
-          <p style={{ fontFamily: 'Dancing Script, cursive', color: '#333', fontSize: '0.875rem' }}>
+          <p style={{ fontFamily: 'Dancing Script, cursive', color: '#333', fontSize: '0.875rem', textDecoration: completed ? 'line-through' : 'none' }}>
             End: {endDate ? endDate.format('DD-MM-YYYY') : '...'}
           </p>
         </div>

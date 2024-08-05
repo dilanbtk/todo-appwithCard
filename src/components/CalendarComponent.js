@@ -34,6 +34,9 @@ const CalendarComponent = () => {
         startAccessor="start"
         endAccessor="end"
         style={{ height: 600 }}
+        eventPropGetter={(event) => ({
+          style: { backgroundColor: event.color },
+        })}
       />
     </div>
   );

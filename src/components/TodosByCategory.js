@@ -1,42 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { db } from '../firebase'; // Firebase veritabanı ayarlarını içeren dosya
 import { collection, query, where, onSnapshot, deleteDoc, doc, updateDoc } from 'firebase/firestore'; // Firestore'dan veri almak ve güncellemek için gerekli fonksiyonlar
 import TodoCard from './TodoCard'; // Todo kartını render etmek için bileşen
 
 const TodosByCategory = ({ searchTerm }) => {
-  const { category } = useParams();
-  const location = useLocation();
-  const [todos, setTodos] = useState([]);
+  const { category } = useParams(); // URL'den kategori bilgisi al
+  const [todos, setTodos] = useState([]); // Todo'ları saklamak için durum değişkeni
 
   useEffect(() => {
     if (!category) return;
 
     const q = query(collection(db, 'todos'), where('category', '==', category));
+
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const todosArray = [];
       querySnapshot.forEach((doc) => {
         todosArray.push({ ...doc.data(), id: doc.id });
       });
       setTodos(todosArray);
-    });
+    }); //  Kategoriye göre todo'ları al ve durum değişkenini güncelle
 
     return () => unsubscribe();
   }, [category]);
 
-  useEffect(() => {
-    if (location.hash) {
-      const todoId = location.hash.substring(1);
-      const todoElement = document.getElementById(todoId);
-      if (todoElement) {
-        todoElement.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  }, [location.hash, todos]);
-
-  const filteredTodos = todos.filter(todo => 
+  const filteredTodos = todos.filter(todo =>
     (todo.title ? todo.title.toLowerCase() : '').includes(searchTerm.toLowerCase())
-  );
+  ); //  Arama terimine göre filtrele
 
   const handleDelete = async (id) => {
     await deleteDoc(doc(db, 'todos', id));
@@ -59,13 +49,12 @@ const TodosByCategory = ({ searchTerm }) => {
       <h1 className="text-2xl font-bold mb-4">{category}</h1>
       <div className="flex flex-wrap justify-around" style={{ fontFamily: 'Dancing Script, cursive' }}>
         {filteredTodos.map((todo) => (
-          <div key={todo.id} id={todo.id}>
-            <TodoCard
-              todo={todo}
-              onDelete={handleDelete}
-              onUpdate={handleUpdate}
-            />
-          </div>
+          <TodoCard
+            key={todo.id}
+            todo={todo}
+            onDelete={handleDelete}
+            onUpdate={handleUpdate}
+          />
         ))}
       </div>
     </div>
